@@ -106,13 +106,34 @@
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusBottomEnd="8dp"
             android:layout_below="@id/passwordTil"
-            app:startIconDrawable="@drawable/pass_black"/>
+            app:startIconDrawable="@drawable/pass_black">
 
         <EditText
             android:id="@+id/cPasswordEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/haveAccountTv"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cPasswordTil"
+            android:text="@string/have_account_login"
+            android:layout_marginTop="5dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/registerBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/m_button_height"
+            android:text="Register"
+            android:layout_alignParentBottom="true"
+            app:icon="@drawable/lock_img"/>
+
 
 
     </RelativeLayout>

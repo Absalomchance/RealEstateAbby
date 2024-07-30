@@ -13,4 +13,6 @@
     <string name="password">Password</string>
     <string name="no_account_register">No Account? <b>Register</b></string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="have_account_login">Have Account? <b>Login</b></string>
+    <string name="didn_t_recieve_otp_resend">Didn\'t recieve OTP? <b>Resend</b></string>
 </resources>
