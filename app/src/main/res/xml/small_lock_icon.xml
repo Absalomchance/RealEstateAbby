@@ -1,0 +1,14 @@
+<?xml version ="1.0" encoding ="utf-8"?><!--  Learn More about how to use App Actions: https://developer.android.com/guide/actions/index.html -->
+<actions>
+    <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+        <item
+            android:width="24dp"
+            android:height="24dp"
+            android:gravity="center">
+            <bitmap
+                android:src="@drawable/lock_white"
+                android:gravity="center" />
+        </item>
+    </layer-list>
+
+</actions>

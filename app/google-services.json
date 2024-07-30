@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "303064394272",
+    "firebase_url": "https://real-estate-java-abby-default-rtdb.firebaseio.com",
+    "project_id": "real-estate-java-abby",
+    "storage_bucket": "real-estate-java-abby.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303064394272:android:3c125d9a517f45a2592a45",
+        "android_client_info": {
+          "package_name": "com.example.realestate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303064394272-00695ksol3fvogm1sbd86024rihlk5e7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.realestate",
+            "certificate_hash": "42611433d57cf88dc95e6ee0df1431e5c5b2d902"
+          }
+        },
+        {
+          "client_id": "303064394272-nr1oi2metrgg18ip25jo52trh4ad10le.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBGUwBJTAFqB9ASIllNfKGMHcY_aqDllQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303064394272-nr1oi2metrgg18ip25jo52trh4ad10le.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
