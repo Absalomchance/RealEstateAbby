@@ -21,6 +21,8 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -68,8 +70,26 @@ public class LoginPhoneActivity extends AppCompatActivity {
         });
         binding.resendOtpTv.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                resendVerificationCode(forceResendingToken);
+            }
+        });
 
+        binding.verifyOtpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String otp = binding.otpEt.getText().toString().trim();
+
+               if (otp.isEmpty()){
+
+                   binding.otpEt.setError("Enter OTP");
+                   binding.otpEt.requestFocus();
+               }else if(otp.length() < 6){
+                   binding.otpEt.setError("OTP must be 6 characters");
+                   binding.otpEt.requestFocus();
+               }else {
+                    verifyPhoneNumberWithCode(otp);
+                }
             }
         });
     }
@@ -97,6 +117,26 @@ startPhoneNumberVerification();
     private void resendVerificationCode(PhoneAuthProvider.ForceResendingToken token){
         progressDialog.setMessage("Resending OTP to " +phoneNumberWithCode);
         progressDialog.show();
+
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
+                .setPhoneNumber(phoneNumberWithCode)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
+                .setCallbacks(mCallBacks)
+                .setForceResendingToken(token)
+                .build();
+
+        PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+
+    private void verifyPhoneNumberWithCode(String otp){
+        Log.d(TAG, "verifyPhoneNumberWithCode: OTP "+otp);
+
+        progressDialog.setMessage("Verifying OTP...");
+        progressDialog.show();
+
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, otp);
+        signInWithPhoneAuthCredential(credential);
     }
     private void startPhoneNumberVerification(){
         progressDialog.setMessage("Sending OTP to "+phoneNumberWithCode);
@@ -111,6 +151,7 @@ startPhoneNumberVerification();
 
 PhoneAuthProvider.verifyPhoneNumber(options);
     }
+
 
     private void phoneLoginCallbacks() {  // Corrected method name
         Log.d(TAG, "phoneLoginCallbacks: ");
@@ -207,7 +248,7 @@ PhoneAuthProvider.verifyPhoneNumber(options);
         hashMap.put("userType", "" + MyUtils.USER_TYPE_PHONE);
         hashMap.put("token", "");
 
-        DatabaseReference ref = FirebaseAuth.getInstance().getReference("Users");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
         ref.child(registeredUserUid)
                 .setValue(hashMap)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
