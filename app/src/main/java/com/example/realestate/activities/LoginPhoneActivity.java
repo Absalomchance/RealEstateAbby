@@ -7,7 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.util.Log;  // Import Log class
+import android.util.Log;
 
 import com.example.realestate.MyUtils;
 import com.example.realestate.R;
@@ -22,7 +22,6 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -53,67 +52,72 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        phoneLoginCallbacks();  // Method call
+        phoneLoginCallbacks();  // Initialize phone login callbacks
 
+        // Back button click listener
         binding.toolbarBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                finish();  // Go back to the previous screen
             }
         });
 
+        // Send OTP button click listener
         binding.sendOtpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validateData();
+                validateData();  // Validate and start the phone number verification process
             }
         });
+
+        // Resend OTP button click listener
         binding.resendOtpTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resendVerificationCode(forceResendingToken);
+                resendVerificationCode(forceResendingToken);  // Resend the OTP code
             }
         });
 
+        // Verify OTP button click listener
         binding.verifyOtpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String otp = binding.otpEt.getText().toString().trim();
+                String otp = binding.otpEt.getText().toString().trim();
 
-               if (otp.isEmpty()){
-
-                   binding.otpEt.setError("Enter OTP");
-                   binding.otpEt.requestFocus();
-               }else if(otp.length() < 6){
-                   binding.otpEt.setError("OTP must be 6 characters");
-                   binding.otpEt.requestFocus();
-               }else {
-                    verifyPhoneNumberWithCode(otp);
+                if (otp.isEmpty()){
+                    binding.otpEt.setError("Enter OTP");
+                    binding.otpEt.requestFocus();
+                } else if(otp.length() < 6){
+                    binding.otpEt.setError("OTP must be 6 characters");
+                    binding.otpEt.requestFocus();
+                } else {
+                    verifyPhoneNumberWithCode(otp);  // Verify the OTP
                 }
             }
         });
     }
 
     private String phoneCode = "", phoneNumber = "", phoneNumberWithCode = "";
-    private void validateData(){
-phoneCode = binding.phoneCodeTil.getSelectedCountryCodeWithPlus();
-phoneNumber = binding.phoneNumberEt.getText().toString().trim();
-phoneNumberWithCode = phoneCode + phoneNumber;
 
-Log.d(TAG, "validateData: Phone Code: "+phoneCode);
+    // Method to validate phone number input and start verification
+    private void validateData(){
+        phoneCode = binding.phoneCodeTil.getSelectedCountryCodeWithPlus();
+        phoneNumber = binding.phoneNumberEt.getText().toString().trim();
+        phoneNumberWithCode = phoneCode + phoneNumber;
+
+        Log.d(TAG, "validateData: Phone Code: "+phoneCode);
         Log.d(TAG, "validateData: Phone Number: "+phoneNumber);
-        Log.d(TAG, "validateData: Phone Code With Code: "+phoneNumberWithCode);
+        Log.d(TAG, "validateData: Phone Code With Number: "+phoneNumberWithCode);
 
         if (phoneNumber.isEmpty()){
             binding.phoneNumberEt.setError("Enter Phone Number");
             binding.phoneNumberEt.requestFocus();
         } else {
-startPhoneNumberVerification();
+            startPhoneNumberVerification();  // Start verification process if phone number is valid
         }
-
     }
 
-
+    // Method to resend verification code
     private void resendVerificationCode(PhoneAuthProvider.ForceResendingToken token){
         progressDialog.setMessage("Resending OTP to " +phoneNumberWithCode);
         progressDialog.show();
@@ -129,6 +133,7 @@ startPhoneNumberVerification();
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
+    // Method to verify phone number with OTP code
     private void verifyPhoneNumberWithCode(String otp){
         Log.d(TAG, "verifyPhoneNumberWithCode: OTP "+otp);
 
@@ -138,6 +143,8 @@ startPhoneNumberVerification();
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, otp);
         signInWithPhoneAuthCredential(credential);
     }
+
+    // Method to start phone number verification
     private void startPhoneNumberVerification(){
         progressDialog.setMessage("Sending OTP to "+phoneNumberWithCode);
         progressDialog.show();
@@ -149,11 +156,11 @@ startPhoneNumberVerification();
                 .setCallbacks(mCallBacks)
                 .build();
 
-PhoneAuthProvider.verifyPhoneNumber(options);
+        PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
-
-    private void phoneLoginCallbacks() {  // Corrected method name
+    // Method to handle phone login callbacks
+    private void phoneLoginCallbacks() {
         Log.d(TAG, "phoneLoginCallbacks: ");
 
         mCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -169,7 +176,6 @@ PhoneAuthProvider.verifyPhoneNumber(options);
                 progressDialog.dismiss();
 
                 binding.phoneInputRl.setVisibility(View.GONE);
-
                 binding.otpInputRl.setVisibility(View.VISIBLE);
 
                 MyUtils.toast(LoginPhoneActivity.this,"OTP sent to "+phoneNumberWithCode);
@@ -194,6 +200,7 @@ PhoneAuthProvider.verifyPhoneNumber(options);
         };
     }
 
+    // Method to sign in using the phone auth credential
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential){
         Log.d(TAG, "signInWithPhoneAuthCredential: ");
 
@@ -207,8 +214,7 @@ PhoneAuthProvider.verifyPhoneNumber(options);
                         Log.d(TAG, "onSuccess: ");
 
                         if (authResult.getAdditionalUserInfo().isNewUser()){
-
-                            updateUserInfo();
+                            updateUserInfo();  // Save user info if it's a new user
                         } else {
                             Log.d(TAG, "onSuccess: Existing User, Logged In...");
                             startActivity(new Intent(LoginPhoneActivity.this, MainActivity.class));
@@ -226,12 +232,12 @@ PhoneAuthProvider.verifyPhoneNumber(options);
                 });
     }
 
+    // Method to save user information to Firebase
     private void updateUserInfo(){
         Log.d(TAG, "updateUserInfo: ");
 
         progressDialog.setMessage("Saving User Info...");
         progressDialog.show();
-
 
         long timestamp = MyUtils.timestamp();
         String registeredUserUid = firebaseAuth.getUid();
@@ -240,13 +246,12 @@ PhoneAuthProvider.verifyPhoneNumber(options);
         hashMap.put("uid", registeredUserUid);
         hashMap.put("email", "");
         hashMap.put("name", "");
-        hashMap.put("timestamp", +timestamp);
-        hashMap.put("phoneCode", ""+phoneCode);
-        hashMap.put("phoneNumber", ""+phoneNumber);
+        hashMap.put("timestamp", timestamp);
+        hashMap.put("phoneCode", phoneCode);
+        hashMap.put("phoneNumber", phoneNumber);
         hashMap.put("profileImageUrl", "");
         hashMap.put("dob", "");
-        hashMap.put("userType", "" + MyUtils.USER_TYPE_PHONE);
-        hashMap.put("token", "");
+        hashMap.put("userType", "user");
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
         ref.child(registeredUserUid)
@@ -254,8 +259,10 @@ PhoneAuthProvider.verifyPhoneNumber(options);
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Log.d(TAG, "onSuccess: User info saved...");
+                        Log.d(TAG, "onSuccess: ");
 
+                        progressDialog.dismiss();
+                        MyUtils.toast(LoginPhoneActivity.this,"Account Created...");
                         startActivity(new Intent(LoginPhoneActivity.this, MainActivity.class));
                         finishAffinity();
                     }
@@ -263,9 +270,9 @@ PhoneAuthProvider.verifyPhoneNumber(options);
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: ", e);
+                        Log.e(TAG, "onFailure: ",e );
                         progressDialog.dismiss();
-                        MyUtils.toast(LoginPhoneActivity.this, "Failed to save due to "+e.getMessage());
+                        MyUtils.toast(LoginPhoneActivity.this, "Failed saving user info due to "+e.getMessage());
                     }
                 });
     }

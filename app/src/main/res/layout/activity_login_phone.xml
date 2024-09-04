@@ -18,20 +18,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/back_white"
-            android:background="@color/black_transparent"
+            android:background="@android:color/transparent"
             android:padding="10dp"
-            android:tint="?attr/colorOnPrimary"/>
+            app:tint="?attr/colorOnPrimary"
+            android:contentDescription="@string/back_button_description" /> <!-- Added contentDescription -->
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileIv"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerHorizontal="true"
-            android:background="?attr/colorOnPrimary"
+            android:background="@android:color/transparent"
             android:src="@drawable/person_black"
             app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
             android:layout_marginVertical="15dp"/>
-
 
         <TextView
             android:id="@+id/loginPhoneLabel"
@@ -44,14 +44,13 @@
             android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
-    
+
     <RelativeLayout
         android:id="@+id/phoneInputRl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:visibility="visible">
-
 
         <com.hbb20.CountryCodePicker
             android:id="@+id/phoneCodeTil"
@@ -86,7 +85,6 @@
                 android:layout_height="wrap_content"
                 android:inputType="phone"/>
 
-
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -99,7 +97,6 @@
             android:text="Send OTP"/>
 
     </RelativeLayout>
-
 
     <RelativeLayout
         android:id="@+id/otpInputRl"
@@ -121,12 +118,12 @@
             app:counterMaxLength="6"
             app:startIconDrawable="@drawable/phone_black">
 
-          <EditText
-              android:id="@+id/otpEt"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:inputType="number"
-              android:maxLength="6"/>
+            <EditText
+                android:id="@+id/otpEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="6"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
